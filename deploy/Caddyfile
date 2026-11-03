@@ -1,0 +1,41 @@
+# Darineh Group Landing Page Caddy Configuration
+# Host: darineh.com (canonical) and www.darineh.com (301 redirect)
+# Serves the official group landing page from Darineh/ui/dist
+
+(darineh_landing_security) {
+    header {
+        Strict-Transport-Security "max-age=31536000; includeSubDomains"
+        X-Content-Type-Options "nosniff"
+        Referrer-Policy "strict-origin-when-cross-origin"
+        X-Frame-Options "SAMEORIGIN"
+        Content-Security-Policy "default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; font-src 'self'; img-src 'self' data: https:; object-src 'none'; base-uri 'self'; frame-ancestors 'self'"
+        -Server
+    }
+}
+
+darineh.com {
+    import darineh_landing_security
+
+    encode zstd gzip
+
+    # Path to compiled landing page (Darineh/ui/dist)
+    root * /srv/darineh-landing
+
+    @static {
+        file
+        path *.ico *.png *.svg *.woff2 *.css *.js *.txt
+    }
+    header @static Cache-Control "public, max-age=604800, stale-while-revalidate=86400"
+
+    @html {
+        path / /index.html
+    }
+    header @html Cache-Control "no-cache"
+
+    file_server
+    try_files {path} /index.html
+}
+
+www.darineh.com {
+    redir https://darineh.com{uri} permanent
+}
