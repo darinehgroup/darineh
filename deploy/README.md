@@ -26,12 +26,13 @@ python3 build.py
 ```
 خروجی در مسیر `ui/dist` (شامل `index.html`, `assets/`, `fonts/`, `robots.txt`) تولید می‌شود.
 
-### ۲. کپی به مسیر سرور (مثلاً `/srv/darineh-landing`)
+### ۲. استقرار روی سرور دارینه
 ```bash
-sudo mkdir -p /srv/darineh-landing
-sudo cp -r ui/dist/* /srv/darineh-landing/
-sudo chown -R caddy:caddy /srv/darineh-landing
+deploy/deploy.sh                  # بیلد + استقرار
+deploy/deploy.sh status           # وضعیت + استقرارهای قبلی
+deploy/deploy.sh rollback <زمان>  # بازگشت
 ```
+سایت روی سرور در `/opt/darineh/static` است (Caddy مشترک آن را به‌جای `/srv/static` سرو می‌کند). backup ها و `releases.log` کنار آن در `/opt/darineh/static.deploy` می‌مانند، نه داخل پوشه‌ی سایت.
 
 ### ۳. تنظیم Caddy
 بلوک زیر را به فایل `/etc/caddy/Caddyfile` سرور اضافه نموده و Caddy را ریلود کنید:

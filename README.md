@@ -33,15 +33,17 @@ python3 build.py
 
 ## ▌ استقرار (Deployment)
 
-وب‌سایت اصلی بر روی سرور دارینه و با وب‌سرور [Caddy](deploy/Caddyfile) سرو می‌شود:
+با همان یک دستورِ بقیه‌ی سرویس‌های دارینه:
 
 ```bash
-# کپی خروجی بیلد به مسیر سرور
-sudo mkdir -p /srv/darineh-landing
-sudo cp -r dist/* /srv/darineh-landing/
+deploy/deploy.sh                  # بیلد + استقرار روی سرور دارینه
+deploy/deploy.sh status           # وضعیت سایت روی سرور + استقرارهای قبلی
+deploy/deploy.sh rollback <زمان>  # بازگشت به یک نسخه‌ی قبلی (فهرست: status)
 ```
 
-تنظیمات Caddyfile در مسیر `deploy/Caddyfile` قرار دارد و با بارگذاری مجدد Caddy فعال می‌شود.
+اسکریپت سایت را می‌سازد، نسخه‌ی فعلی را کنار می‌گذارد، فایل‌ها را در `/opt/darineh/static` روی سرور می‌گذارد (همان پوشه‌ای که Caddy مشترک سرو می‌کند) و آخر کار چک می‌کند که `darineh.com` همان `index.html` تازه را بدهد. Caddy ری‌استارت نمی‌خواهد.
+
+تنظیمات Caddy این سایت در `deploy/Caddyfile` است؛ روی سرور در `/opt/darineh/caddy/Caddyfile` اعمال می‌شود.
 
 ---
 
